@@ -1,0 +1,15 @@
+{
+  "name": "send-credits",
+  "version": "1.0.0",
+  "description": "tool for viewing credit balances on Stargate and sending credits for shallow pathways.",
+  "main": "index.ts",
+  "author": "max glassman",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "ethers": "^5.4.7",
+    "prettier": "^2.8.8"
+  }
+}
