@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { rpcMapping } from '../../shared/constants/rpcMapping';
 import { chainIds } from '../../shared/constants/chainIds';
 
-function createProvider(
+export function createProvider(
   chainId: chainIds,
   index: number
 ): Promise<ethers.providers.JsonRpcProvider> {
