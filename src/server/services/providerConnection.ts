@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { rpcMapping } from '../../shared/constants/rpcMapping';
 import { chainIds } from '../../shared/constants/chainIds';
 
-export function createProvider(
+function createProvider(
   chainId: chainIds,
   index: number
 ): Promise<ethers.providers.JsonRpcProvider> {
@@ -26,7 +26,35 @@ export function createProvider(
   });
 }
 
+export async function providerExponentialBackoff(
+  chainId: chainIds
+): Promise<ethers.providers.JsonRpcProvider> {
+  const rpcUrls = rpcMapping[chainId];
+  if (!rpcUrls) {
+    throw new Error(`No RPC URLs found for chainId: ${chainId}`);
+  }
+
+  for (const url of rpcUrls) {
+    for (let attempt = 1; attempt <= 5; attempt++) {
+      try {
+        const provider = await createProvider(chainId, rpcUrls.indexOf(url));
+        return provider;
+      } catch (error) {
+        console.error(
+          `Attempt ${attempt} failed for chainId ${chainId}, URL: ${url}`
+        );
+        if (attempt < 5) {
+          const backoffTime = Math.pow(2, attempt) * 10;
+          await new Promise((resolve) => setTimeout(resolve, backoffTime));
+        }
+      }
+    }
+  }
+
+  throw new Error(`All RPCs for chainId ${chainId} have failed.`);
+}
+
 // (async () => {
-//   const provider = await createProvider(102, 0);
+//   const provider = await providerExponentialBackoff(101);
 //   console.log(provider);
 // })();
