@@ -39,7 +39,7 @@ export const rpcMapping: RPC = {
     'https://arbitrum.blockpi.network/v1/rpc/public',
   ],
   [chainIds.OPTIMISM]: [
-    'https://mainnet.optimism.io',
+    'https://opt-mainnet.g.alchemy.com/v2/0Do2F8gsDM34kqjDDh51r1SPEYrxJCsN',
     'https://optimism.meowrpc.com',
     'https://optimism-mainnet.public.blastapi.io',
     'https://optimism.blockpi.network/v1/rpc/public',

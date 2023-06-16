@@ -3,15 +3,31 @@ import { chainIds } from '../../shared/constants/chainIds';
 import { chainPoolMapping } from '../../shared/constants/chainPoolMapping';
 import { poolIds } from '../../shared/constants/poolIds';
 import { getProviders } from '../../shared/utils/provider';
-import { ChainPath, PoolContract } from '../models/PoolContract';
+import { ChainPath, Pool } from '../models/PoolContract';
 import { contractCallBackOff } from '../../shared/utils/contractCall';
 import { poolAbi } from '../../shared/constants/contractABI/pool';
 import { erc20Abi } from '../../shared/constants/contractABI/erc20';
+import { ChainPoolMap } from '../../shared/interfaces/chainPoolMap';
 
-export async function getPoolContract(
+export async function getAllPools(
+  chainPoolMapping: ChainPoolMap
+): Promise<Pool[]> {
+  const chainPoolMap: any = chainPoolMapping;
+  const poolPromiseArray = [];
+
+  for (const chain of Object.keys(chainPoolMap)) {
+    for (const pool of Object.keys(chainPoolMap[chain])) {
+      poolPromiseArray.push(getPool(parseInt(chain), parseInt(pool)));
+    }
+  }
+  const poolArray: Pool[] = await Promise.all(poolPromiseArray);
+  return poolArray;
+}
+
+export async function getPool(
   chainId: chainIds,
   poolId: poolIds
-): Promise<PoolContract> {
+): Promise<Pool> {
   const providers = getProviders(chainId);
   const address = chainPoolMapping[chainId][poolId]?.address || '0x';
 
@@ -47,7 +63,7 @@ export async function getPoolContract(
   const deltaCreditsNum: number =
     parseInt(deltaCredits.toString()) / 10 ** sharedDecimalsNum;
 
-  return new PoolContract(
+  return new Pool(
     chainId,
     poolId,
     address,
@@ -188,3 +204,8 @@ function handleChainPath(
     idealBalance
   );
 }
+
+(async () => {
+  const p = await getAllPools(chainPoolMapping);
+  console.log(p[0].getChainPaths());
+})();

@@ -2,7 +2,7 @@ import { chainIds } from '../../shared/constants/chainIds';
 import { poolIds } from '../../shared/constants/poolIds';
 
 //may want to add functions for calling delta & sending credits
-export class PoolContract {
+export class Pool {
   private _chainId: chainIds;
   private _poolId: poolIds;
   private _address: string;
@@ -15,8 +15,8 @@ export class PoolContract {
   private _chainPaths: ChainPath[];
 
   constructor(
-    chainId: chainIds,
-    poolId: poolIds,
+    chainId: number,
+    poolId: number,
     address: string,
     sharedDecimals: number,
     tokenAddress: string,
@@ -36,6 +36,36 @@ export class PoolContract {
     this._eqReward = eqReward;
     this._deltaCredits = deltaCredits;
     this._chainPaths = chainPaths;
+  }
+  getChainId(): number {
+    return this._chainId;
+  }
+  getPoolId(): number {
+    return this._poolId;
+  }
+  getAddress(): string {
+    return this._address;
+  }
+  getSharedDecimals(): number {
+    return this._sharedDecimals;
+  }
+  getTokenAddress(): string {
+    return this._tokenAddress;
+  }
+  getTokenBalance(): number {
+    return this._tokenBalance;
+  }
+  getLiquidityProvided(): number {
+    return this._liquidityProvided;
+  }
+  getEqReward(): number {
+    return this._eqReward;
+  }
+  getDeltaCredits(): number {
+    return this._deltaCredits;
+  }
+  getChainPaths(): ChainPath[] {
+    return this._chainPaths;
   }
 }
 

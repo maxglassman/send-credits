@@ -81,15 +81,12 @@ export const chainPoolMapping: ChainPoolMap = {
       address: '0xd8772edBF88bBa2667ed011542343b0eDDaCDa47',
       chainPaths: {
         [chainIds.BSC]: [poolIds.METIS],
-        [chainIds.AVALANCHE]: [poolIds.METIS],
         [chainIds.METIS]: [poolIds.METIS],
       },
     },
     [poolIds.metisUSDT]: {
       address: '0x430Ebff5E3E80A6C58E7e6ADA1d90F5c28AA116d',
       chainPaths: {
-        [chainIds.BSC]: [poolIds.metisUSDT],
-        [chainIds.AVALANCHE]: [poolIds.metisUSDT],
         [chainIds.METIS]: [poolIds.metisUSDT],
       },
     },
@@ -137,15 +134,12 @@ export const chainPoolMapping: ChainPoolMap = {
       address: '0xD4CEc732b3B135eC52a3c0bc8Ce4b8cFb9dacE46',
       chainPaths: {
         [chainIds.ETHEREUM]: [poolIds.METIS],
-        [chainIds.AVALANCHE]: [poolIds.METIS],
         [chainIds.METIS]: [poolIds.METIS],
       },
     },
     [poolIds.metisUSDT]: {
       address: '0x68C6c27fB0e02285829e69240BE16f32C5f8bEFe',
       chainPaths: {
-        [chainIds.ETHEREUM]: [poolIds.metisUSDT],
-        [chainIds.AVALANCHE]: [poolIds.metisUSDT],
         [chainIds.METIS]: [poolIds.metisUSDT],
       },
     },
@@ -194,8 +188,6 @@ export const chainPoolMapping: ChainPoolMap = {
     [poolIds.metisUSDT]: {
       address: '0xEAe5c2F6B25933deB62f754f239111413A0A25ef',
       chainPaths: {
-        [chainIds.BSC]: [poolIds.metisUSDT],
-        [chainIds.ETHEREUM]: [poolIds.metisUSDT],
         [chainIds.METIS]: [poolIds.metisUSDT],
       },
     },
@@ -364,7 +356,7 @@ export const chainPoolMapping: ChainPoolMap = {
         [chainIds.AVALANCHE]: [poolIds.USDC, poolIds.USDT],
         [chainIds.POLYGON]: [poolIds.USDC, poolIds.USDT],
         [chainIds.ARBITRUM]: [poolIds.USDC, poolIds.USDT],
-        [chainIds.FANTOM]: [poolIds.USDC],
+        [chainIds.OPTIMISM]: [poolIds.USDC],
       },
     },
   },
@@ -373,7 +365,6 @@ export const chainPoolMapping: ChainPoolMap = {
       address: '0xAad094F6A75A14417d39f04E690fC216f080A41a',
       chainPaths: {
         [chainIds.BSC]: [poolIds.METIS],
-        [chainIds.AVALANCHE]: [poolIds.METIS],
         [chainIds.ETHEREUM]: [poolIds.METIS],
       },
     },
