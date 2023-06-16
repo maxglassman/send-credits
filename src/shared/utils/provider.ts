@@ -26,6 +26,18 @@ function createProvider(
   });
 }
 
+export function getProviders(
+  chainId: chainIds
+): ethers.providers.JsonRpcProvider[] {
+  const rpcUrls = rpcMapping[chainId];
+  const providers = [];
+  for (const r of rpcUrls) {
+    const provider = new ethers.providers.JsonRpcProvider(r);
+    providers.push(provider);
+  }
+  return providers;
+}
+
 export async function providerExponentialBackoff(
   chainId: chainIds
 ): Promise<ethers.providers.JsonRpcProvider> {
@@ -55,6 +67,6 @@ export async function providerExponentialBackoff(
 }
 
 // (async () => {
-//   const provider = await providerExponentialBackoff(101);
-//   console.log(provider);
+//   const providers = getProviders(101);
+//   console.log(providers);
 // })();

@@ -1,8 +1,17 @@
 import { chainIds } from '../constants/chainIds';
 import { poolIds } from '../constants/poolIds';
 
-type Address = string;
+export type Address = string;
+
+export type ExistingKeys<T> = keyof T;
+
+export type ChainPaths = Partial<Record<chainIds, poolIds[]>>;
 
 export type ChainPoolMap = {
-  [chainId in chainIds]: Partial<Record<poolIds, Address>>;
+  [K in chainIds]: {
+    [P in poolIds]?: {
+      address: Address;
+      chainPaths: ChainPaths;
+    };
+  };
 };
