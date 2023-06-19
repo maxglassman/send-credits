@@ -8,12 +8,16 @@ import { contractCallBackOff } from '../../shared/utils/contractCall';
 import { poolAbi } from '../../shared/constants/contractABI/pool';
 import { erc20Abi } from '../../shared/constants/contractABI/erc20';
 import { ChainPoolMap } from '../../shared/interfaces/chainPoolMap';
+import { getKeyByValue } from '../../shared/utils/enumKeyLookup';
 
 export async function getAllPools(
   chainPoolMapping: ChainPoolMap
-): Promise<Pool[]> {
+): Promise<any> {
   const chainPoolMap: any = chainPoolMapping;
   const poolPromiseArray = [];
+  const chainId: any = chainIds;
+  const poolId: any = poolIds;
+  const poolObj: any = {};
 
   for (const chain of Object.keys(chainPoolMap)) {
     for (const pool of Object.keys(chainPoolMap[chain])) {
@@ -21,7 +25,45 @@ export async function getAllPools(
     }
   }
   const poolArray: Pool[] = await Promise.all(poolPromiseArray);
-  return poolArray;
+
+  for (const pool of poolArray) {
+    const pathwayValues: any = {};
+    const srcPoolKey: string =
+      getKeyByValue(chainId, pool.getChainId()) +
+      '-' +
+      getKeyByValue(poolId, pool.getPoolId());
+
+    for (const path of pool.getChainPaths()) {
+      const dstPoolKey: string =
+        getKeyByValue(chainId, path.getDstChainId()) +
+        '-' +
+        getKeyByValue(poolId, path.getDstPoolId());
+      pathwayValues[dstPoolKey] = {
+        balance: path.getBalance(),
+        idealBalance: path.getIdealBalance(),
+        balancePerc: path.getBalance() / path.getIdealBalance(),
+        credits: path.getCredits(),
+      };
+    }
+    const poolValues = {
+      balance: pool.getTokenBalance(),
+      liquidityProvided: pool.getLiquidityProvided(),
+      balancePerc: pool.getTokenBalance() / pool.getLiquidityProvided(),
+      surplusDeficit: pool.getTokenBalance() - pool.getLiquidityProvided(),
+      eqReward: pool.getEqReward(),
+      eqRewardBps:
+        pool.getTokenBalance() - pool.getLiquidityProvided() > 0
+          ? 0
+          : pool.getEqReward() /
+            (pool.getLiquidityProvided() - pool.getTokenBalance()),
+      address: pool.getAddress(),
+      tokenAddress: pool.getTokenAddress(),
+      chainPaths: pathwayValues,
+    };
+
+    poolObj[srcPoolKey] = poolValues;
+  }
+  return poolObj;
 }
 
 export async function getPool(
@@ -207,5 +249,5 @@ function handleChainPath(
 
 (async () => {
   const p = await getAllPools(chainPoolMapping);
-  console.log(p[0].getChainPaths());
+  console.log(p);
 })();

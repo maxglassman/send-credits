@@ -3,8 +3,8 @@ import { poolIds } from '../../shared/constants/poolIds';
 
 //may want to add functions for calling delta & sending credits
 export class Pool {
-  private _chainId: chainIds;
-  private _poolId: poolIds;
+  private _chainId: number;
+  private _poolId: number;
   private _address: string;
   private _sharedDecimals: number;
   private _tokenAddress: string;
@@ -70,35 +70,62 @@ export class Pool {
 }
 
 export class ChainPath {
-  srcChainId: chainIds;
-  srcPoolId: poolIds;
-  dstChainId: chainIds;
-  dstPoolId: poolIds;
-  weight: number;
-  balance: number;
-  lkb: number;
-  credits: number;
-  idealBalance: number;
+  private _srcChainId: number;
+  private _srcPoolId: number;
+  private _dstChainId: number;
+  private _dstPoolId: number;
+  private _weight: number;
+  private _balance: number;
+  private _lkb: number;
+  private _credits: number;
+  private _idealBalance: number;
 
   constructor(
-    srcChainId: chainIds,
-    srcPoolId: poolIds,
-    dstChainId: chainIds,
-    dstPoolId: poolIds,
+    srcChainId: number,
+    srcPoolId: number,
+    dstChainId: number,
+    dstPoolId: number,
     weight: number,
     balance: number,
     lkb: number,
     credits: number,
     idealBalance: number
   ) {
-    this.srcChainId = srcChainId;
-    this.srcPoolId = srcPoolId;
-    this.dstChainId = dstChainId;
-    this.dstPoolId = dstPoolId;
-    this.weight = weight;
-    this.balance = balance;
-    this.lkb = lkb;
-    this.credits = credits;
-    this.idealBalance = idealBalance;
+    this._srcChainId = srcChainId;
+    this._srcPoolId = srcPoolId;
+    this._dstChainId = dstChainId;
+    this._dstPoolId = dstPoolId;
+    this._weight = weight;
+    this._balance = balance;
+    this._lkb = lkb;
+    this._credits = credits;
+    this._idealBalance = idealBalance;
+  }
+  getSrcChainId(): number {
+    return this._srcChainId;
+  }
+  getSrcPoolId(): number {
+    return this._srcPoolId;
+  }
+  getDstChainId(): number {
+    return this._dstChainId;
+  }
+  getDstPoolId(): number {
+    return this._dstPoolId;
+  }
+  getWeight(): number {
+    return this._weight;
+  }
+  getBalance(): number {
+    return this._balance;
+  }
+  getIdealBalance(): number {
+    return this._idealBalance;
+  }
+  getLkb(): number {
+    return this._lkb;
+  }
+  getCredits(): number {
+    return this._credits;
   }
 }
