@@ -10,9 +10,7 @@ import { erc20Abi } from '../../shared/constants/contractABI/erc20';
 import { ChainPoolMap } from '../../shared/interfaces/chainPoolMap';
 import { getKeyByValue } from '../../shared/utils/enumKeyLookup';
 
-export async function getAllPools(
-  chainPoolMapping: ChainPoolMap
-): Promise<any> {
+export async function getAllPools(): Promise<any> {
   const chainPoolMap: any = chainPoolMapping;
   const poolPromiseArray = [];
   const chainId: any = chainIds;
@@ -246,8 +244,3 @@ function handleChainPath(
     idealBalance
   );
 }
-
-(async () => {
-  const p = await getAllPools(chainPoolMapping);
-  console.log(p);
-})();
