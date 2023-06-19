@@ -7,7 +7,6 @@ import { ChainPath, Pool } from '../models/PoolContract';
 import { contractCallBackOff } from '../../shared/utils/contractCall';
 import { poolAbi } from '../../shared/constants/contractABI/pool';
 import { erc20Abi } from '../../shared/constants/contractABI/erc20';
-import { ChainPoolMap } from '../../shared/interfaces/chainPoolMap';
 import { getKeyByValue } from '../../shared/utils/enumKeyLookup';
 
 export async function getAllPools(): Promise<any> {
