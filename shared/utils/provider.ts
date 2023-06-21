@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
-import { rpcMapping } from '../../shared/constants/rpcMapping';
-import { chainIds } from '../../shared/constants/chainIds';
+import { rpcMapping } from '../constants/rpcMapping';
+import { chainIds } from '../constants/chainIds';
 
 function createProvider(
   chainId: chainIds,
