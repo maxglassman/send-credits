@@ -5,7 +5,9 @@ import { PoolTable } from './components/PoolTable';
 import { ChainPathDataItem } from './interfaces/ChainPathData';
 import { ChainPathTable } from './components/ChainPathTable';
 import dotenv from 'dotenv';
-dotenv.config({ path: '../.env' }); //this is not working
+import { formatPoolData, formatChainPathData } from './utils/formatting';
+
+dotenv.config({ path: '../../.env' });
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Pool');
@@ -19,13 +21,13 @@ const App: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await fetch('http://localhost:8000/api');
-      console.log(response);
       const data = await response.json();
-      console.log('data fetched');
-      console.log(data);
 
-      setPoolData(data.Pools);
-      setChainPathData(data.ChainPaths);
+      const formattedPoolData = formatPoolData(data.Pools);
+      const formattedChainPathData = formatChainPathData(data.ChainPaths);
+
+      setPoolData(formattedPoolData);
+      setChainPathData(formattedChainPathData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }

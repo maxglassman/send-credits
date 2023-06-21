@@ -1,23 +1,52 @@
-import React from 'react';
-import { PoolTableProps } from '../interfaces/PoolData';
+import React, { useState } from 'react';
+import { PoolTableProps, PoolDataItem } from '../interfaces/PoolData';
 
 export const PoolTable: React.FC<PoolTableProps> = ({ data }) => {
+  const [sortKey, setSortKey] = useState<keyof PoolDataItem | ''>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (key: keyof PoolDataItem) => {
+    if (key === sortKey) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedDataItems = [...data].sort((a, b) => {
+    if (sortKey !== '') {
+      const valueA = a[sortKey];
+      const valueB = b[sortKey];
+
+      if (valueA < valueB) {
+        return sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      }
+    }
+    return 0;
+  });
+
   return (
     <table>
       <thead>
         <tr>
-          <th>Pool</th>
-          <th>Balance</th>
-          <th>Liquidity Provided</th>
-          <th>%</th>
-          <th>Surplus/Deficit</th>
-          <th>Eq Reward</th>
-          <th>Eq Reward Bps</th>
+          <th onClick={() => handleSort('srcPool')}>Pool</th>
+          <th onClick={() => handleSort('balance')}>Balance</th>
+          <th onClick={() => handleSort('liquidityProvided')}>
+            Liquidity Provided
+          </th>
+          <th onClick={() => handleSort('balancePerc')}>%</th>
+          <th onClick={() => handleSort('surplusDeficit')}>Surplus/Deficit</th>
+          <th onClick={() => handleSort('eqReward')}>Eq Reward</th>
+          <th onClick={() => handleSort('eqRewardBps')}>Eq Reward Bps</th>
           <th>Delta Credits</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
+        {sortedDataItems.map((item, index) => (
           <tr key={index}>
             <td>{item.srcPool}</td>
             <td>{item.balance}</td>

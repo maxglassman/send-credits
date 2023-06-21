@@ -1,12 +1,13 @@
 export interface PoolDataItem {
   srcPool: string;
-  balance: number;
-  liquidityProvided: number;
-  balancePerc: number;
-  surplusDeficit: number;
-  eqReward: number;
-  eqRewardBps: number;
-  deltaCredits: number;
+  srcPoolId: number;
+  balance: string;
+  liquidityProvided: string;
+  balancePerc: string;
+  surplusDeficit: string;
+  eqReward: string;
+  eqRewardBps: string;
+  deltaCredits: string;
 }
 
 export interface PoolTableProps {

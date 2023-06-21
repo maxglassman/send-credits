@@ -10,7 +10,7 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
           <th>Destination Pool</th>
           <th>Balance</th>
           <th>Ideal Balance</th>
-          <th>Balance Percent</th>
+          <th>Percent</th>
           <th>Dst Pool Credits</th>
           <th>Dest Pool Delta Credits</th>
           <th>Send Credits</th>
