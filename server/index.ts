@@ -1,8 +1,9 @@
 import express, { Application } from 'express';
 import routes from './routes';
-
+import dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
 const app: Application = express();
-const port = process.env.PORT || 8000;
+const port = process.env.EXPRESS_PORT;
 
 // Middleware
 app.use(express.json());

@@ -14,7 +14,12 @@ export async function getAllPools(): Promise<any> {
   const poolPromiseArray = [];
   const chainId: any = chainIds;
   const poolId: any = poolIds;
-  const poolObj: any = {};
+
+  //variables for structuring response [{Pools: [{Pool1},{Pool2},{Pool3}],
+  //                                    ChainPaths: [{ChainPath1},ChainPath2},ChainPath3}}]
+  const resObj: any = {};
+  const poolResArray: any = [];
+  const chainPathResArray: any = [];
 
   for (const chain of Object.keys(chainPoolMap)) {
     for (const pool of Object.keys(chainPoolMap[chain])) {
@@ -24,7 +29,6 @@ export async function getAllPools(): Promise<any> {
   const poolArray: Pool[] = await Promise.all(poolPromiseArray);
 
   for (const pool of poolArray) {
-    const pathwayValues: any = {};
     const srcPoolKey: string =
       getKeyByValue(chainId, pool.getChainId()) +
       '-' +
@@ -35,14 +39,18 @@ export async function getAllPools(): Promise<any> {
         getKeyByValue(chainId, path.getDstChainId()) +
         '-' +
         getKeyByValue(poolId, path.getDstPoolId());
-      pathwayValues[dstPoolKey] = {
+      const chainPathValues = {
+        srcPool: srcPoolKey,
+        dstPool: dstPoolKey,
         balance: path.getBalance(),
         idealBalance: path.getIdealBalance(),
         balancePerc: path.getBalance() / path.getIdealBalance(),
         credits: path.getCredits(),
       };
+      chainPathResArray.push(chainPathValues);
     }
     const poolValues = {
+      srcPool: srcPoolKey,
       balance: pool.getTokenBalance(),
       liquidityProvided: pool.getLiquidityProvided(),
       balancePerc: pool.getTokenBalance() / pool.getLiquidityProvided(),
@@ -55,12 +63,45 @@ export async function getAllPools(): Promise<any> {
             (pool.getLiquidityProvided() - pool.getTokenBalance()),
       address: pool.getAddress(),
       tokenAddress: pool.getTokenAddress(),
-      chainPaths: pathwayValues,
+      deltaCredits: pool.getDeltaCredits(),
     };
-
-    poolObj[srcPoolKey] = poolValues;
+    poolResArray.push(poolValues);
   }
-  return poolObj;
+
+  //store credits and deltaCredits in resObj.ChainPaths
+  for (const path of chainPathResArray) {
+    path.credits = storeCredits(chainPathResArray, path.srcPool, path.dstPool);
+    path.deltaCredits = storeDeltaCredits(poolResArray, path.dstPool);
+  }
+  resObj.Pools = poolResArray;
+  resObj.ChainPaths = chainPathResArray;
+  return resObj;
+}
+//helper function for getAllPools, retrieves credits from resObj of oppositely directed paths and for each path in resObj.ChainPaths and stores in the resObj.ChainPaths array
+function storeCredits(
+  chainPathsArray: any,
+  srcPool: string,
+  dstPool: string
+): number {
+  let credits = 0;
+  for (const path of chainPathsArray) {
+    if (path.srcPool === dstPool && path.dstPool === srcPool) {
+      credits = path.credits;
+      return credits;
+    }
+  }
+  return credits;
+}
+//helper function for getAllPools, retrieves deltaCredits from resObj of dstPool and stores in the resObj.ChainPaths array
+function storeDeltaCredits(poolsArray: any, dstPool: string): number {
+  let deltaCredits = 0;
+  for (const pool of poolsArray) {
+    if (pool.srcPool === dstPool) {
+      deltaCredits = pool.deltaCredits;
+      return deltaCredits;
+    }
+  }
+  return deltaCredits;
 }
 
 export async function getPool(
