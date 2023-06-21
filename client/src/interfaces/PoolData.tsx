@@ -1,8 +1,8 @@
 export interface PoolDataItem {
-  pool: string;
+  srcPool: string;
   balance: number;
   liquidityProvided: number;
-  percentage: number;
+  balancePerc: number;
   surplusDeficit: number;
   eqReward: number;
   eqRewardBps: number;

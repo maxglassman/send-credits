@@ -20,13 +20,13 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
       <tbody>
         {data.map((item, index) => (
           <tr key={index}>
-            <td>{item.sourcePool}</td>
-            <td>{item.destinationPool}</td>
+            <td>{item.srcPool}</td>
+            <td>{item.dstPool}</td>
             <td>{item.balance}</td>
             <td>{item.idealBalance}</td>
-            <td>{item.balancePercent}</td>
-            <td>{item.dstPoolCredits}</td>
-            <td>{item.destPoolDeltaCredits}</td>
+            <td>{item.balancePerc}</td>
+            <td>{item.dstCredits}</td>
+            <td>{item.dstDeltaCredits}</td>
             <td>
               <button>Send Credits</button>
             </td>

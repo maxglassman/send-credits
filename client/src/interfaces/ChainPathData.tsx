@@ -1,11 +1,11 @@
 export interface ChainPathDataItem {
-  sourcePool: string;
-  destinationPool: string;
+  srcPool: string;
+  dstPool: string;
   balance: number;
   idealBalance: number;
-  balancePercent: number;
-  dstPoolCredits: number;
-  destPoolDeltaCredits: number;
+  balancePerc: number;
+  dstCredits: number;
+  dstDeltaCredits: number;
 }
 
 export interface ChainPathTableProps {

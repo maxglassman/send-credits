@@ -11,7 +11,8 @@ import { getKeyByValue } from '../../shared/utils/enumKeyLookup';
 
 export async function getAllPools(): Promise<any> {
   const chainPoolMap: any = chainPoolMapping;
-  const poolPromiseArray = [];
+  //create variable poolPromiseArray to store promises for each pool
+  const poolPromiseArray: any = [];
   const chainId: any = chainIds;
   const poolId: any = poolIds;
 
@@ -41,7 +42,9 @@ export async function getAllPools(): Promise<any> {
         getKeyByValue(poolId, path.getDstPoolId());
       const chainPathValues = {
         srcPool: srcPoolKey,
+        srcPoolId: path.getSrcPoolId(),
         dstPool: dstPoolKey,
+        dstPoolId: path.getDstPoolId(),
         balance: path.getBalance(),
         idealBalance: path.getIdealBalance(),
         balancePerc: path.getBalance() / path.getIdealBalance(),
@@ -51,6 +54,7 @@ export async function getAllPools(): Promise<any> {
     }
     const poolValues = {
       srcPool: srcPoolKey,
+      srcPoolId: pool.getPoolId(),
       balance: pool.getTokenBalance(),
       liquidityProvided: pool.getLiquidityProvided(),
       balancePerc: pool.getTokenBalance() / pool.getLiquidityProvided(),
@@ -70,8 +74,12 @@ export async function getAllPools(): Promise<any> {
 
   //store credits and deltaCredits in resObj.ChainPaths
   for (const path of chainPathResArray) {
-    path.credits = storeCredits(chainPathResArray, path.srcPool, path.dstPool);
-    path.deltaCredits = storeDeltaCredits(poolResArray, path.dstPool);
+    path.dstCredits = storeCredits(
+      chainPathResArray,
+      path.srcPool,
+      path.dstPool
+    );
+    path.dstDeltaCredits = storeDeltaCredits(poolResArray, path.dstPool);
   }
   resObj.Pools = poolResArray;
   resObj.ChainPaths = chainPathResArray;
@@ -218,7 +226,7 @@ async function getChainPaths(
 ): Promise<ChainPath[]> {
   const poolChainPaths: any =
     chainPoolMapping[srcChainId][srcPoolId]?.chainPaths;
-  const chainPathPromises = [];
+  const chainPathPromises: any = [];
 
   for (const chain of Object.keys(poolChainPaths)) {
     for (const pool of poolChainPaths[chain]) {
