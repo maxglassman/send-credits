@@ -4,10 +4,9 @@ import { PoolDataItem } from './interfaces/PoolData';
 import { PoolTable } from './components/PoolTable';
 import { ChainPathDataItem } from './interfaces/ChainPathData';
 import { ChainPathTable } from './components/ChainPathTable';
-import dotenv from 'dotenv';
 import { formatPoolData, formatChainPathData } from './utils/formatting';
-
-dotenv.config({ path: '../../.env' });
+import dotenv from 'dotenv';
+dotenv.config();
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Pool');
@@ -17,7 +16,7 @@ const App: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api');
+      const response = await fetch(process.env.REACT_APP_SERVER_API || '');
       const data = await response.json();
 
       const formattedPoolData = formatPoolData(data.Pools);
