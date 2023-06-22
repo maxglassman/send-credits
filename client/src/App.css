@@ -22,26 +22,119 @@ h2 {
   margin-bottom: 10px;
 }
 
-nav ul {
+header {
+  text-align: center;
+}
+
+.navbar {
+  background-color: #000;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.navbar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-nav li {
+.navbar li {
   margin-right: 10px;
 }
 
-nav a {
+.navbar a {
   display: block;
   padding: 10px;
   text-decoration: none;
   color: #fff;
-  background-color: #000;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-nav a:hover {
+.navbar a:hover {
   background-color: #fff;
   color: #000;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+th {
+  cursor: pointer;
+  background-color: #9f9f9f;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+th:after {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+th.asc:after {
+  border-bottom: 5px solid #000;
+}
+
+th.desc:after {
+  border-top: 5px solid #000;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+table,
+th,
+td {
+  border: 1px solid #000;
+}
+
+.active {
+  background-color: #aaaaaa;
+  color: #000;
+}
+
+/* Loading Screen Styles */
+.loading-screen {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-text {
+  font-size: 32px;
+  text-align: center;
+}
+
+.filter-input {
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.chainpath-table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-container {
+  display: flex;
+  margin-bottom: 10px;
 }

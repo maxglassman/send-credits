@@ -13,10 +13,7 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Pool');
   const [poolData, setPoolData] = useState<PoolDataItem[]>([]);
   const [chainPathData, setChainPathData] = useState<ChainPathDataItem[]>([]);
-
-  const handleTabClick = (tab: string) => {
-    setActiveTab(tab);
-  };
+  const [loading, setLoading] = useState(true); // New state for loading
 
   const fetchData = async () => {
     try {
@@ -28,8 +25,10 @@ const App: React.FC = () => {
 
       setPoolData(formattedPoolData);
       setChainPathData(formattedChainPathData);
+      setLoading(false); // Update loading state after successful fetch
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false); // Update loading state in case of error
     }
   };
 
@@ -37,24 +36,47 @@ const App: React.FC = () => {
     fetchData();
   }, []);
 
+  // Render loading screen if data is still loading
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <h1 className="loading-text">Steady lads, loading Stargate data...</h1>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <nav>
+      <nav className="navbar">
         <ul>
           <li>
-            <a href="#Pool" onClick={() => handleTabClick('Pool')}>
-              Pool
+            <a
+              href="#Pool"
+              onClick={() => setActiveTab('Pool')}
+              className={activeTab === 'Pool' ? 'active' : ''}
+            >
+              Pools
             </a>
           </li>
           <li>
-            <a href="#ChainPaths" onClick={() => handleTabClick('ChainPaths')}>
-              ChainPaths
+            <a
+              href="#ChainPaths"
+              onClick={() => setActiveTab('ChainPaths')}
+              className={activeTab === 'ChainPaths' ? 'active' : ''}
+            >
+              Chain Paths
             </a>
           </li>
         </ul>
       </nav>
 
+      <header>
+        <h1>Send Credits</h1>
+        <h2>A tool for monitoring & correcting Stargate Pathways.</h2>
+      </header>
+
       {activeTab === 'Pool' && <PoolTable data={poolData} />}
+
       {activeTab === 'ChainPaths' && <ChainPathTable data={chainPathData} />}
     </div>
   );
