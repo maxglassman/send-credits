@@ -1,24 +1,61 @@
-import React from 'react';
-import { ChainPathTableProps } from '../interfaces/ChainPathData';
+import React, { useState } from 'react';
+import {
+  ChainPathDataItem,
+  ChainPathTableProps,
+} from '../interfaces/ChainPathData';
 
 export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
+  const [sortKey, setSortKey] = useState<keyof ChainPathDataItem | ''>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (key: keyof ChainPathDataItem) => {
+    if (key === sortKey) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortKey(key);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedDataItems = [...data].sort((a, b) => {
+    if (sortKey !== '') {
+      let valueA: any = a[sortKey];
+      let valueB: any = b[sortKey];
+      //if sortKey is not equal to srcPool or dstPool, strip $, %, and commas from valueA and valueB, then convert to number.
+      if (!(sortKey === 'srcPool' || sortKey === 'dstPool')) {
+        valueA = Number(valueA.replace(/[$,%]/g, ''));
+        valueB = Number(valueB.replace(/[$,%]/g, ''));
+      }
+
+      if (valueA < valueB) {
+        return sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      }
+    }
+    return 0;
+  });
+
   return (
     <table>
       <thead>
         <tr>
-          <th>Source Pool</th>
-          <th>Destination Pool</th>
-          <th>Balance</th>
-          <th>Ideal Balance</th>
-          <th>Percent</th>
-          <th>Dst Pool Credits</th>
-          <th>Dest Pool Delta Credits</th>
+          <th onClick={() => handleSort('srcPool')}>Source Pool</th>
+          <th onClick={() => handleSort('dstPool')}>Destination Pool</th>
+          <th onClick={() => handleSort('balance')}>Balance</th>
+          <th onClick={() => handleSort('idealBalance')}>Ideal Balance</th>
+          <th onClick={() => handleSort('balancePerc')}>Percent</th>
+          <th onClick={() => handleSort('dstCredits')}>Dst Pool Credits</th>
+          <th onClick={() => handleSort('dstDeltaCredits')}>
+            Dst Pool Delta Credits
+          </th>
           <th>Send Credits</th>
           <th>Call Delta and Send Credits</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
+        {sortedDataItems.map((item, index) => (
           <tr key={index}>
             <td>{item.srcPool}</td>
             <td>{item.dstPool}</td>

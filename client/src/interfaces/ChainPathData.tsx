@@ -1,8 +1,8 @@
 export interface ChainPathDataItem {
   srcPool: string;
-  srcPoolId: number;
+  srcPoolId: string;
   dstPool: string;
-  dstPoolId: number;
+  dstPoolId: string;
   balance: string;
   idealBalance: string;
   balancePerc: string;

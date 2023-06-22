@@ -16,8 +16,13 @@ export const PoolTable: React.FC<PoolTableProps> = ({ data }) => {
 
   const sortedDataItems = [...data].sort((a, b) => {
     if (sortKey !== '') {
-      const valueA = a[sortKey];
-      const valueB = b[sortKey];
+      let valueA: any = a[sortKey];
+      let valueB: any = b[sortKey];
+      //if sortKey is not equal to srcPool, strip $, %, and commas from valueA and valueB, then convert to number.
+      if (sortKey !== 'srcPool') {
+        valueA = Number(valueA.replace(/[$,%]/g, ''));
+        valueB = Number(valueB.replace(/[$,%]/g, ''));
+      }
 
       if (valueA < valueB) {
         return sortDirection === 'asc' ? -1 : 1;
@@ -42,7 +47,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({ data }) => {
           <th onClick={() => handleSort('surplusDeficit')}>Surplus/Deficit</th>
           <th onClick={() => handleSort('eqReward')}>Eq Reward</th>
           <th onClick={() => handleSort('eqRewardBps')}>Eq Reward Bps</th>
-          <th>Delta Credits</th>
+          <th onClick={() => handleSort('deltaCredits')}>Delta Credits</th>
         </tr>
       </thead>
       <tbody>
