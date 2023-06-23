@@ -6,6 +6,8 @@ import { ChainPathDataItem } from './interfaces/ChainPathData';
 import { ChainPathTable } from './components/ChainPathTable';
 import { formatPoolData, formatChainPathData } from './utils/formatting';
 import dotenv from 'dotenv';
+import { ethers } from 'ethers';
+import ConnectWalletButton from './components/ConnectWalletButton';
 dotenv.config();
 
 const App: React.FC = () => {
@@ -13,6 +15,36 @@ const App: React.FC = () => {
   const [poolData, setPoolData] = useState<PoolDataItem[]>([]);
   const [chainPathData, setChainPathData] = useState<ChainPathDataItem[]>([]);
   const [loading, setLoading] = useState(true); // New state for loading
+  const [walletAddress, setWalletAddress] = useState('');
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
+  const [signer, setSigner] = useState<ethers.Signer>();
+
+  const connectWallet = async () => {
+    // Connect to the Ethereum provider
+    // @ts-ignore
+    if (window.ethereum) {
+      try {
+        //@ts-ignore
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        //@ts-ignore
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        // Update state variables
+        setProvider(provider);
+        setSigner(signer);
+        console.log(provider);
+        console.log(signer);
+
+        // Set the wallet address
+        setWalletAddress(await signer.getAddress());
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+      }
+    } else {
+      alert("Please install MetaMask to use this site's full features.");
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -66,8 +98,12 @@ const App: React.FC = () => {
               Chain Paths
             </a>
           </li>
+          <li>
+            <ConnectWalletButton connectWallet={connectWallet} />
+          </li>
         </ul>
       </nav>
+      <h3 className="walletAddress">Wallet Address: {walletAddress}</h3>
 
       <header>
         <h1>Send Credits</h1>

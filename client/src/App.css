@@ -59,6 +59,14 @@ header {
   color: #000;
 }
 
+/* position button with className:walletButton to top right corner*/
+.walletButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
