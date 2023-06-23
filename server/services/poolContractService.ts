@@ -41,8 +41,10 @@ export async function getAllPools(): Promise<any> {
         '-' +
         getKeyByValue(poolId, path.getDstPoolId());
       const chainPathValues = {
+        srcChainId: path.getSrcChainId(),
         srcPool: srcPoolKey,
         srcPoolId: path.getSrcPoolId(),
+        dstChainId: path.getDstChainId(),
         dstPool: dstPoolKey,
         dstPoolId: path.getDstPoolId(),
         balance: path.getBalance(),

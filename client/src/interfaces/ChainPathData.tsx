@@ -1,11 +1,11 @@
 import { ethers } from 'ethers';
 export interface ChainPathDataItem {
-  srcChainId: string;
+  srcChainId: number;
   srcPool: string;
-  srcPoolId: string;
-  dstChainId: string;
+  srcPoolId: number;
+  dstChainId: number;
   dstPool: string;
-  dstPoolId: string;
+  dstPoolId: number;
   balance: string;
   idealBalance: string;
   balancePerc: string;

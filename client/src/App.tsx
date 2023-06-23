@@ -51,6 +51,7 @@ const App: React.FC = () => {
 
       const formattedPoolData = formatPoolData(data.Pools);
       const formattedChainPathData = formatChainPathData(data.ChainPaths);
+      console.log(formattedChainPathData);
 
       setPoolData(formattedPoolData);
       setChainPathData(formattedChainPathData);

@@ -6,8 +6,6 @@ import {
 import { contractCall } from '../services/contractCall';
 import { routerAddresses } from '../constants/contracts';
 import { routerABI } from '../constants/contractABI/router';
-import { routerETHABI } from '../constants/contractABI/routerETH';
-import { ethers } from 'ethers';
 
 export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
   const [sortKey, setSortKey] = useState<keyof ChainPathDataItem | ''>('');
@@ -44,21 +42,13 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
       alert('Please connect your wallet first.');
       return;
     }
-    console.log('here');
+
     const provider = tableProps.provider;
     const signer = tableProps.signer;
-    let contractAddress: string;
-    let contractABI: ethers.ContractInterface;
-    if (itemProps.dstPoolId === '13') {
-      contractAddress = routerAddresses[itemProps.dstChainId].routerETH || '';
-      contractABI = routerETHABI;
-    } else {
-      console.log(routerAddresses['101']);
-      contractAddress = routerAddresses[itemProps.dstChainId].router || '';
-      contractABI = routerABI;
-      console.log(contractAddress);
-      console.log(contractABI);
-    }
+    const contractAddress = routerAddresses[itemProps.dstChainId];
+    const contractABI = routerABI;
+    const signerAddress = await signer.getAddress();
+    console.log(signerAddress);
     contractCall(
       provider,
       signer,
@@ -66,11 +56,10 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
       contractABI,
       'sendCredits',
       [
-        0.01,
         itemProps.srcChainId,
         itemProps.dstPoolId,
         itemProps.srcPoolId,
-        tableProps.signer.getAddress(),
+        signerAddress,
       ]
     );
   };
