@@ -3,8 +3,13 @@ import {
   ChainPathDataItem,
   ChainPathTableProps,
 } from '../interfaces/ChainPathData';
+import { contractCall } from '../services/contractCall';
+import { routerAddresses } from '../constants/contracts';
+import { routerABI } from '../constants/contractABI/router';
+import { routerETHABI } from '../constants/contractABI/routerETH';
+import { ethers } from 'ethers';
 
-export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
+export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
   const [sortKey, setSortKey] = useState<keyof ChainPathDataItem | ''>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [sourcePoolFilter, setSourcePoolFilter] = useState('');
@@ -31,7 +36,46 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
     setDestinationPoolFilter(event.target.value);
   };
 
-  const filteredDataItems = data.filter(
+  const handleSendCredits = async (
+    tableProps: ChainPathTableProps,
+    itemProps: ChainPathDataItem
+  ) => {
+    if (!tableProps.provider || !tableProps.signer) {
+      alert('Please connect your wallet first.');
+      return;
+    }
+    console.log('here');
+    const provider = tableProps.provider;
+    const signer = tableProps.signer;
+    let contractAddress: string;
+    let contractABI: ethers.ContractInterface;
+    if (itemProps.dstPoolId === '13') {
+      contractAddress = routerAddresses[itemProps.dstChainId].routerETH || '';
+      contractABI = routerETHABI;
+    } else {
+      console.log(routerAddresses['101']);
+      contractAddress = routerAddresses[itemProps.dstChainId].router || '';
+      contractABI = routerABI;
+      console.log(contractAddress);
+      console.log(contractABI);
+    }
+    contractCall(
+      provider,
+      signer,
+      contractAddress,
+      contractABI,
+      'sendCredits',
+      [
+        0.01,
+        itemProps.srcChainId,
+        itemProps.dstPoolId,
+        itemProps.srcPoolId,
+        tableProps.signer.getAddress(),
+      ]
+    );
+  };
+
+  const filteredDataItems = props.data.filter(
     (item) =>
       item.srcPool.toLowerCase().includes(sourcePoolFilter.toLowerCase()) &&
       item.dstPool.toLowerCase().includes(destinationPoolFilter.toLowerCase())
@@ -106,7 +150,9 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = ({ data }) => {
               <td>{item.dstCredits}</td>
               <td>{item.dstDeltaCredits}</td>
               <td>
-                <button>Send Credits</button>
+                <button onClick={() => handleSendCredits(props, item)}>
+                  Send Credits
+                </button>
               </td>
               <td>
                 <button>Call Delta and Send Credits</button>

@@ -33,8 +33,6 @@ const App: React.FC = () => {
         // Update state variables
         setProvider(provider);
         setSigner(signer);
-        console.log(provider);
-        console.log(signer);
 
         // Set the wallet address
         setWalletAddress(await signer.getAddress());
@@ -112,7 +110,13 @@ const App: React.FC = () => {
 
       {activeTab === 'Pool' && <PoolTable data={poolData} />}
 
-      {activeTab === 'ChainPaths' && <ChainPathTable data={chainPathData} />}
+      {activeTab === 'ChainPaths' && (
+        <ChainPathTable
+          data={chainPathData}
+          provider={provider}
+          signer={signer}
+        />
+      )}
     </div>
   );
 };
