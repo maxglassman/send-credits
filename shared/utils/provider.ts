@@ -65,8 +65,3 @@ export async function providerExponentialBackoff(
 
   throw new Error(`All RPCs for chainId ${chainId} have failed.`);
 }
-
-// (async () => {
-//   const providers = getProviders(101);
-//   console.log(providers);
-// })();

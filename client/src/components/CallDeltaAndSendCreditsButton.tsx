@@ -6,10 +6,8 @@ import { routerAddresses } from '../constants/contracts';
 import { routerABI } from '../constants/contractABI/router';
 import { checkNework } from '../services/checkNetwork';
 
-export const SendCreditsButton: React.FC<ContractInterButtonProps> = (
-  props
-) => {
-  const handleSendCredits = async () => {
+export const CallDeltaButton: React.FC<ContractInterButtonProps> = (props) => {
+  const handleCallDeltaSendCredits = async () => {
     if (!props.provider || !props.signer) {
       alert('Please connect your wallet first.');
       return;
@@ -22,6 +20,15 @@ export const SendCreditsButton: React.FC<ContractInterButtonProps> = (
     const contractAddress = routerAddresses[props.chainPath.dstChainId];
     const contractABI = routerABI;
     const signerAddress = await props.signer.getAddress();
+    await contractCall(
+      props.provider,
+      props.signer,
+      contractAddress,
+      contractABI,
+      'callDelta',
+      [props.chainPath.dstPoolId, 0]
+    );
+
     contractCall(
       props.provider,
       props.signer,
@@ -33,8 +40,13 @@ export const SendCreditsButton: React.FC<ContractInterButtonProps> = (
         props.chainPath.dstPoolId,
         props.chainPath.srcPoolId,
         signerAddress,
-      ]
+      ],
+      '.03'
     );
   };
-  return <button onClick={handleSendCredits}>Send Credits</button>;
+  return (
+    <button onClick={handleCallDeltaSendCredits}>
+      Call Delta & Send Credits
+    </button>
+  );
 };

@@ -6,20 +6,23 @@ export async function contractCall(
   contractAddress: string,
   contractABI: ethers.ContractInterface,
   contractFunction: string,
-  contractParams: any[]
+  contractParams: any[],
+  value?: string
 ) {
   try {
+    let overrideOptions: any = { gasLimit: 5000000 };
+    if (value) overrideOptions['value'] = ethers.utils.parseUnits(value, 18);
+
     const contract = new ethers.Contract(
       contractAddress,
       contractABI,
       provider
     );
     const contractWithSigner = contract.connect(signer);
-    console.log(contractWithSigner);
 
     const contractCall = await contractWithSigner[contractFunction](
       ...contractParams,
-      { value: ethers.utils.parseUnits('0.03', 18), gasLimit: 5000000 }
+      overrideOptions
     );
 
     return contractCall;

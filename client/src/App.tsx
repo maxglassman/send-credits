@@ -29,7 +29,6 @@ const App: React.FC = () => {
         //@ts-ignore
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        console.log(await provider.getNetwork());
 
         // Update state variables
         setProvider(provider);
@@ -52,7 +51,6 @@ const App: React.FC = () => {
 
       const formattedPoolData = formatPoolData(data.Pools);
       const formattedChainPathData = formatChainPathData(data.ChainPaths);
-      console.log(formattedChainPathData);
 
       setPoolData(formattedPoolData);
       setChainPathData(formattedChainPathData);

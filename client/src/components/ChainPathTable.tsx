@@ -4,6 +4,7 @@ import {
   ChainPathTableProps,
 } from '../interfaces/ChainPathData';
 import { SendCreditsButton } from './SendCreditsButton';
+import { CallDeltaButton } from './CallDeltaAndSendCreditsButton';
 
 export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
   const [sortKey, setSortKey] = useState<keyof ChainPathDataItem | ''>('');
@@ -114,7 +115,11 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
                 />
               </td>
               <td>
-                <button>Call Delta and Send Credits</button>
+                <CallDeltaButton
+                  provider={props.provider}
+                  signer={props.signer}
+                  chainPath={item}
+                />
               </td>
             </tr>
           ))}
