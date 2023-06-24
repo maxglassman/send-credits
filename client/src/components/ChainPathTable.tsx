@@ -3,9 +3,7 @@ import {
   ChainPathDataItem,
   ChainPathTableProps,
 } from '../interfaces/ChainPathData';
-import { contractCall } from '../services/contractCall';
-import { routerAddresses } from '../constants/contracts';
-import { routerABI } from '../constants/contractABI/router';
+import { SendCreditsButton } from './SendCreditsButton';
 
 export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
   const [sortKey, setSortKey] = useState<keyof ChainPathDataItem | ''>('');
@@ -32,36 +30,6 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setDestinationPoolFilter(event.target.value);
-  };
-
-  const handleSendCredits = async (
-    tableProps: ChainPathTableProps,
-    itemProps: ChainPathDataItem
-  ) => {
-    if (!tableProps.provider || !tableProps.signer) {
-      alert('Please connect your wallet first.');
-      return;
-    }
-
-    const provider = tableProps.provider;
-    const signer = tableProps.signer;
-    const contractAddress = routerAddresses[itemProps.dstChainId];
-    const contractABI = routerABI;
-    const signerAddress = await signer.getAddress();
-    console.log(signerAddress);
-    contractCall(
-      provider,
-      signer,
-      contractAddress,
-      contractABI,
-      'sendCredits',
-      [
-        itemProps.srcChainId,
-        itemProps.dstPoolId,
-        itemProps.srcPoolId,
-        signerAddress,
-      ]
-    );
   };
 
   const filteredDataItems = props.data.filter(
@@ -139,9 +107,11 @@ export const ChainPathTable: React.FC<ChainPathTableProps> = (props) => {
               <td>{item.dstCredits}</td>
               <td>{item.dstDeltaCredits}</td>
               <td>
-                <button onClick={() => handleSendCredits(props, item)}>
-                  Send Credits
-                </button>
+                <SendCreditsButton
+                  provider={props.provider}
+                  signer={props.signer}
+                  chainPath={item}
+                />
               </td>
               <td>
                 <button>Call Delta and Send Credits</button>
