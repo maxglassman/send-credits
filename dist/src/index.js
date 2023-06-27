@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+require("./setup-env");
 dotenv_1.default.config({ path: '../.env' });
 const app = (0, express_1.default)();
 const port = process.env.EXPRESS_PORT;
