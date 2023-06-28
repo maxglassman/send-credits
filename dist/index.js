@@ -10,13 +10,13 @@ const dotenv_1 = __importDefault(require("dotenv"));
 require("./setup-env");
 dotenv_1.default.config({ path: '../.env' });
 const app = (0, express_1.default)();
-const port = process.env.EXPRESS_PORT;
+const port = process.env.PORT || 8000; // Use dynamic port assigned by Heroku or default to 8000
 //CORS
 app.use((0, cors_1.default)());
 // Middleware
 app.use(express_1.default.json());
 // Routes
-app.use('/api', routes_1.default);
+app.use('/', routes_1.default);
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
