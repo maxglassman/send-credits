@@ -10,7 +10,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 require("./setup-env");
 dotenv_1.default.config({ path: '../.env' });
 const app = (0, express_1.default)();
-const port = process.env.EXPRESS_PORT;
+const port = process.env.EXPRESS_PORT || 8000;
 //CORS
 app.use((0, cors_1.default)());
 // Middleware
