@@ -15,7 +15,7 @@ export async function contractCallBackOff(
         return result;
       } catch (error) {
         console.error(
-          `Attempt ${attempt} failed for function: ${fn} on network:${p.network} for address:${address}`
+          `Attempt ${attempt} failed for function: ${fn} on network:${p.network.name} for address:${address}`
         );
         if (attempt < 5) {
           const backoffTime = Math.pow(2, attempt) * 10;
