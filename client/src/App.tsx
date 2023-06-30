@@ -8,6 +8,7 @@ import { formatPoolData, formatChainPathData } from './utils/formatting';
 import dotenv from 'dotenv';
 import { ethers } from 'ethers';
 import ConnectWalletButton from './components/ConnectWalletButton';
+import MobileOverlay from './components/MobileOverlay';
 dotenv.config();
 
 const App: React.FC = () => {
@@ -18,6 +19,12 @@ const App: React.FC = () => {
   const [walletAddress, setWalletAddress] = useState('');
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [signer, setSigner] = useState<ethers.Signer>();
+
+  const isMobileDevice = window.innerWidth <= 768;
+
+  if (isMobileDevice) {
+    return <MobileOverlay />;
+  }
 
   const connectWallet = async () => {
     // Connect to the Ethereum provider
