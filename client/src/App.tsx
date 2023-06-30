@@ -20,6 +20,27 @@ const App: React.FC = () => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [signer, setSigner] = useState<ethers.Signer>();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(process.env.REACT_APP_SERVER_API || '');
+        const data = await response.json();
+
+        const formattedPoolData = formatPoolData(data.Pools);
+        const formattedChainPathData = formatChainPathData(data.ChainPaths);
+
+        setPoolData(formattedPoolData);
+        setChainPathData(formattedChainPathData);
+        setLoading(false); // Update loading state after successful fetch
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false); // Update loading state in case of error
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const isMobileDevice = window.innerWidth <= 768;
 
   if (isMobileDevice) {
@@ -50,27 +71,6 @@ const App: React.FC = () => {
       alert("Please install MetaMask to use this site's full features.");
     }
   };
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(process.env.REACT_APP_SERVER_API || '');
-      const data = await response.json();
-
-      const formattedPoolData = formatPoolData(data.Pools);
-      const formattedChainPathData = formatChainPathData(data.ChainPaths);
-
-      setPoolData(formattedPoolData);
-      setChainPathData(formattedChainPathData);
-      setLoading(false); // Update loading state after successful fetch
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setLoading(false); // Update loading state in case of error
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   // Render loading screen if data is still loading
   if (loading) {
